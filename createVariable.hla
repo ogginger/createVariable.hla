@@ -1,0 +1,52 @@
+//createVariable.hla: Creates a piece of memory of a certain size, and assigns a value to it in assembly language.
+
+program p;
+#include("stdlib.hhf");
+	
+	procedure Variables; @noframe; @nodisplay;
+	begin Variables;
+		//ArraySize is passed in via EAX.
+		intmul( 4, EAX ); //Size of element (in bytes) * ArraySize
+		mem.alloc( EAX );		
+		ret();
+	end Variables;
+
+	procedure setVariableAddress; @noframe; @nodisplay;
+	begin setVariableAddress;
+		//Pass Position using EAX;
+		//Pass Value using EBX;
+		//Pass VariableAddress using ECX;
+
+		intmul( 4, EAX );
+		add( EAX, ECX );
+		mov( EBX, [ECX] );	
+
+		ret();
+	end setVariableAddress;
+	
+	procedure createVariable; @noframe; @nodisplay;
+	begin createVariable;
+		mov( EAX, ECX );
+		mem.alloc( EBX );
+		mov( ECX, [EAX] );
+		ret();
+	end createVariable;
+
+begin p;
+	stdout.put("createVariable.hla: Entrypoint.", nl);
+	mov( 4, EAX );
+	call Variables;
+	push( EAX );
+
+	mov( 4, EAX );
+	mov( 52, EBX );
+	call createVariable;
+	push( EAX );
+	
+
+
+	pop(EAX);
+	mem.free( EAX ); //Destroy Variable.
+	pop(EAX);
+	mem.free( EAX ); //Destroy Variable Array.
+end p;
